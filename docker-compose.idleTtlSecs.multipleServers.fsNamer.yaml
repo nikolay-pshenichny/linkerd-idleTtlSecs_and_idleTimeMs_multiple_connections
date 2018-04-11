@@ -1,0 +1,6 @@
+version: "3"
+
+services:
+  linkerd-client-side:
+    command: "/opt/config.idleTtlSecs.multipleServers.fsNamer.yaml"
+    

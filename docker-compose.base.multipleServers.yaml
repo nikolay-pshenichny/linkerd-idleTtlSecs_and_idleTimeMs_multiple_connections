@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  h2-greeter-server-1:
+    build: ./greeter_server
+    privileged: true
+    command: ":7002"
+    networks:
+      - default
+
+  h2-greeter-server-2:
+    build: ./greeter_server
+    privileged: true
+    command: ":7002"
+    networks:
+      - default
+
+  h2-greeter-server-3:
+    build: ./greeter_server
+    privileged: true
+    command: ":7002"
+    networks:
+      - default
+      
+  linkerd-client-side:
+    build: ./l5d_wrapper
+    privileged: true
+    command: "/opt/config.yaml"
+    volumes:
+      - ./:/opt
+    ports:
+      - 7000:7000
+      - 7001:7001
+    depends_on:
+      - "h2-greeter-client"
+    networks:
+      - default
+
+  h2-greeter-client:
+    build: ./greeter_client
+    privileged: true
+    command: "linkerd-client-side:7001 LittleBobbyTables"
+    depends_on:
+      - "h2-greeter-server-1"
+      - "h2-greeter-server-2"
+      - "h2-greeter-server-3"
+    networks:
+      - default
+
+networks:
+  default:

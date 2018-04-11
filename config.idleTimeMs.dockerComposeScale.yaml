@@ -1,0 +1,24 @@
+admin:
+  ip: 0.0.0.0
+  port: 7000
+
+routers:
+  - protocol: h2
+    label: out_route
+    servers:
+      - port: 7001
+        ip: 0.0.0.0
+    client:
+      hostConnectionPool:
+        idleTimeMs: 60000
+
+    originator: true
+    dtab: |
+      /svc => /$/inet/h2-greeter-server/7002
+
+namers:
+  - kind: io.l5d.fs
+    rootDir: /opt/discovery
+
+usage:
+  enabled: false

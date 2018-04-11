@@ -1,0 +1,24 @@
+admin:
+  ip: 0.0.0.0
+  port: 7000
+
+routers:
+  - protocol: h2
+    label: out_route
+    servers:
+      - port: 7001
+        ip: 0.0.0.0
+    bindingCache:
+      idleTtlSecs: 60
+
+    originator: false
+    dtab: |
+      /fs# => /#/io.l5d.fs;
+      /svc => /$/io.buoyant.hostportPfx/fs#;
+
+namers:
+  - kind: io.l5d.fs
+    rootDir: /opt/discovery
+
+usage:
+  enabled: false
